@@ -1,5 +1,5 @@
-#include <headers/porting.h> 
-#include <headers/Interpreter.h> 
+#include <porting.h> 
+#include <Interpreter.h> 
 
 #include <iostream>
 #include <string>
@@ -28,7 +28,7 @@ namespace{
             if(!maybe_val){
                 return 0;
             }
-            sum += repl::convert_argument<int>(*maybe_val).value_or("0");
+            sum += repl::convert_argument<int>(*maybe_val).value_or(0);
         }
         return sum;
     }

@@ -1,0 +1,10 @@
+^C:\USERS\USER\DESKTOP\REPL\SRC\INTERPRETER_\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/user/Desktop/REPL -BC:/Users/user/Desktop/REPL/build --check-stamp-file C:/Users/user/Desktop/REPL/build/src/Interpreter_/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

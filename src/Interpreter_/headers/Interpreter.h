@@ -7,29 +7,29 @@
 #include <queue>
 #include <string>
 
-#include "headers/porting.h"
-#include <headers/CommandTypesHelper.h>
+#include "porting.h"
+#include "CommandTypesHelper.h"
 
 namespace repl
 {
     struct Command{
         CommandFunc command;
-        std::vector<CommandArgs> arguments;
+        std::vector<Argument> arguments;
     };
 
 
-    INTERPRETER_EXPORT class Interpreter{
+    REPL_INTERPRETER_EXPORT class Interpreter{
         public:
             bool queue(std::string const& command);
             bool registerCommand(std::string const& command_name, CommandFunc const& handler);
             void poll();
             void setCallback(Callback const& callback);
         private:
-            std::map<std::string, CommandFunction> _commands;
+            std::map<std::string, CommandFunc> _commands;
             std::queue<Command> _command_queue;
-            std::optional<CommandCallback> _callback;
-    }
-    INTERPRETER_EXPORT std::unique_ptr<Interpreter> make_interpreter();
+            std::optional<Callback> _callback;
+    };
+    REPL_INTERPRETER_EXPORT std::unique_ptr<Interpreter> make_interpreter();
 }
 
 #endif 

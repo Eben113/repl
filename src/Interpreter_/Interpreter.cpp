@@ -5,6 +5,7 @@
 #include <string_view>
 #include <vector>
 #include <optional>
+#include <algorithm>
 
 namespace
 {
@@ -21,8 +22,10 @@ namespace
                 second = std::find_first_of(first, last, std::cbegin(delim), std::cend(delim));
 
                 if(first != second){
-                    output.emplace_back(first, second-first)
+                    output.emplace_back(first, second-first);
                 }
+
+                if(second == last) break;
             }
         return output;
     }
@@ -70,7 +73,7 @@ namespace
         std::vector<repl::Argument> Args;
         std::transform(begin(strings), end(strings), back_inserter(Args),
         [](auto  const& args){
-            return std::string  {begin(arg), end(arg)};
+            return std::string{begin(args), end(args)};
         });
 
         return Args;   
@@ -110,7 +113,7 @@ bool repl::Interpreter::queue(std::string const& command_str){
 }
 
 bool repl::Interpreter::registerCommand(std::string const& command_name, CommandFunc const& handler){
-    auto const split_commands = split_space(command_name);
+    auto const split_commands = split(command_name);
     if(split_commands.size() != 1){
         return false;
     }
@@ -126,13 +129,13 @@ bool repl::Interpreter::registerCommand(std::string const& command_name, Command
 void repl::Interpreter::poll(){
     for(std::size_t i = 0; i < _command_queue.size(); ++i){
         auto const command_req = _command_queue.front();
-        auto const output = command_req.command.f(command_req.arguments);
+        auto const result = command_req.command.f(command_req.arguments);
 
-        if(callback){
+        if(_callback){
             auto const out_str = std::visit(overloaded{
                 [](std::string const& arg) -> std::optional<std::string> {return arg;},
-                [](int const& arg) -> std::optional<std::string> {return std::string(arg);},
-                [](float const& arg) -> std::optional<std::string> {return std::string(arg);},
+                [](int const& arg) -> std::optional<std::string> {return std::to_string(arg);},
+                [](float const& arg) -> std::optional<std::string> {return std::to_string(arg);},
                 [](auto const& arg) -> std::optional<std::string> {return std::string(arg);}
             }, result);
 
@@ -149,5 +152,5 @@ void repl::Interpreter::setCallback(Callback const& callback){
 }
 
 std::unique_ptr<repl::Interpreter> repl::make_interpreter(){
-    return std::make_unique<repl::Interpreter>
+    return std::make_unique<repl::Interpreter>();
 }

@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/user/Desktop/REPL/build/cmake_install.cmake",
+		"C:/Users/user/Desktop/REPL/build/src/repl/cmake_install.cmake",
+		"C:/Users/user/Desktop/REPL/build/src/Interpreter_/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
